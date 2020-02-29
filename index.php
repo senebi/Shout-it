@@ -1,3 +1,9 @@
+<?php include "database.php";
+    //Create select query
+    $query="select * from shouts order by id desc";
+    $shouts=mysqli_query($con, $query);
+    
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,15 +19,19 @@
             </header>
             <div id="shouts">
                 <ul>
-                    <li class="shout"><span>10:15PM - </span>Brad: Hey what are you guys up to?</li>
-                    <li class="shout"><span>10:15PM - </span>Brad: Hey what are you guys up to?</li>
-                    <li class="shout"><span>10:15PM - </span>Brad: Hey what are you guys up to?</li>
-                    <li class="shout"><span>10:15PM - </span>Brad: Hey what are you guys up to?</li>
-                    <li class="shout"><span>10:15PM - </span>Brad: Hey what are you guys up to?</li>
-                    <li class="shout"><span>10:15PM - </span>Brad: Hey what are you guys up to?</li>
+                    <?php
+                        while($row=mysqli_fetch_assoc($shouts)){
+                            echo "<li class='shout'><span>".$row["time"]."</span> <strong>".$row["user"]."</strong>: ".$row["message"]."</li>";
+                        }
+                    ?>
                 </ul>
             </div>
             <div id="input">
+                <?php
+                    if(isset($_GET["error"])){
+                        echo "<div class='error'>".$_GET["error"]."</div>";
+                    }
+                ?>
                 <form method="post" action="process.php">
                     <input type="text" name="user" placeholder="Enter your name" />
                     <input type="text" name="message" placeholder="Type your message" />
